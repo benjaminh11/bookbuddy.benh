@@ -30,7 +30,7 @@ function Account() {
         const data = await response.json();
         if (response.ok) {
           console.log(data);
-          setUser(data.user);
+          setUser(data);
         } else {
           setError(data.message || "Failed to fetch account details.");
         }
