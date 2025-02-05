@@ -63,3 +63,32 @@ body {
   text-decoration: none;
   font-size: 16px;
 }
+
+.single-book-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.single-book-container h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.single-book-container .book-cover {
+  max-width: 100%;
+  height: auto;
+  margin: 15px 0;
+}
+
+.single-book-container h3 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.single-book-container p {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 10px;
+}

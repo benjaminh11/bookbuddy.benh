@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import "../index.css";
+import { Link } from "react-router-dom";
 
 function Books() {
   const [books, setBooks] = useState([]);
@@ -29,6 +30,7 @@ function Books() {
             />
             <h2>{book.title}</h2>
             <p>Author: {book.author}</p>
+            <Link to={`/books/${book.id}`}>View Details</Link>
           </div>
         ))}
       </div>
