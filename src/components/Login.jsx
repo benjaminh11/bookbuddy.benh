@@ -23,7 +23,7 @@ function Login() {
         console.log("Login successful:", data);
         alert("Logged In!");
         localStorage.setItem("token", data.token);
-        navigate("/books");
+        navigate("/account");
       } else {
         console.error("Login failed:", data.message);
         alert("problem logging you in...");
