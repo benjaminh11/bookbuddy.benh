@@ -1,10 +1,10 @@
 /* TODO - add your code to create a functional React component that renders a registration form */
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -17,18 +17,25 @@ function Register() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, password }),
+          body: JSON.stringify({
+            firstname: firstName,
+            lastname: lastName,
+            email,
+            password,
+          }), // Make sure we are using `firstname` and `lastname`
         }
       );
 
       const data = await response.json();
       if (response.ok) {
         console.log("Registration successful:", data);
-        alert("created account");
-        navigate("/login");
+        alert("Account created successfully");
+        // Store the token in local storage to log the user in automatically
+        localStorage.setItem("token", data.token); // Store the token for future authenticated requests
+        navigate("/login"); // Redirect to the login page after registration
       } else {
         console.error("Registration failed:", data.message);
-        alert("trouble creating account...");
+        alert("Trouble creating account...");
       }
     } catch (error) {
       console.error("Error during registration:", error);
@@ -39,11 +46,19 @@ function Register() {
     <div className="register-container">
       <h2>Register</h2>
       <form onSubmit={handleSubmit} className="register-form">
-        <label>Name:</label>
+        <label>First Name:</label>
         <input
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
+
+        <label>Last Name:</label>
+        <input
+          type="text"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
           required
         />
 
