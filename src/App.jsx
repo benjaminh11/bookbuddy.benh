@@ -7,7 +7,7 @@ import Navigations from "./components/Navigations";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Account from "./components/Account";
-import ProtectedRoute from "../../2412-FTB-ET-WEB-FT/unit3/block29/protected-routes-demo/src/components/ProtectedRoute/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const [token, setToken] = useState(null);
