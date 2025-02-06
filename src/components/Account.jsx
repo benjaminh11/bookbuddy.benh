@@ -46,8 +46,45 @@ function Account() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setUser(null); // Clear the user state upon logout
+    setUser(null);
     navigate("/login");
+  };
+
+  const handleReturn = async (bookId) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You must be logged in to return a book.");
+      return;
+    }
+    console.log(user);
+    console.log(`attempting to return book id: ${bookId}`);
+    try {
+      const response = await fetch(
+        `https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/reservations/${bookId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        alert("Book returned successfully!");
+        setUser((prevUser) => ({
+          ...prevUser,
+          books: prevUser.books.filter((book) => book.id !== bookId),
+        }));
+      } else {
+        alert(`Return failed: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Return error:", error);
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   if (loading) return <div>Loading...</div>;
@@ -58,15 +95,29 @@ function Account() {
       {user ? (
         <div>
           <h2>Account Details</h2>
-          <p>
-            <strong>First Name:</strong> {user.firstname}
-          </p>
-          <p>
-            <strong>Last Name:</strong> {user.lastname}
-          </p>
-          <p>
-            <strong>Email:</strong> {user.email}
-          </p>
+          <div>
+            <p>First Name:</p> {user.firstname}
+          </div>
+          <div>
+            <p>Last Name:</p> {user.lastname}
+          </div>
+          <div>
+            <p>Email:</p> {user.email}
+          </div>
+          <p>Your Books:</p>
+          <ul>
+            {user.books.length > 0 ? (
+              user.books.map((book) => (
+                <li key={book.id}>
+                  {book.title}
+                  <button onClick={() => handleReturn(book.id)}>Return</button>
+                </li>
+              ))
+            ) : (
+              <li>You have not checked out any books.</li>
+            )}
+          </ul>
+
           <button onClick={handleLogout} className="logout-btn">
             Logout
           </button>

@@ -22,7 +22,7 @@ function Register() {
             lastname: lastName,
             email,
             password,
-          }), // Make sure we are using `firstname` and `lastname`
+          }),
         }
       );
 

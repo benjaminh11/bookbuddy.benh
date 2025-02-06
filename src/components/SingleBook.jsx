@@ -7,6 +7,8 @@ function SingleBook() {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -32,6 +34,38 @@ function SingleBook() {
     fetchBook();
   }, [bookId]);
 
+  const checkoutBook = async () => {
+    if (!token) {
+      setMessage("You must be logged in to check out a book.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/books/${bookId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ available: false }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage("Book successfully checked out!");
+        setBook((prevBook) => ({ ...prevBook, available: false }));
+      } else {
+        setMessage(data.message || "Failed to check out book.");
+      }
+    } catch (error) {
+      setMessage("Error checking out the book.");
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -41,6 +75,12 @@ function SingleBook() {
       <img src={book.coverimage} alt={book.title} className="book-cover" />
       <h3>Author: {book.author}</h3>
       <p>{book.description}</p>
+      {message && <p className="checkout-message">{message}</p>}
+      {token && book.available && (
+        <button onClick={checkoutBook} className="checkout-button">
+          Check Out
+        </button>
+      )}
     </div>
   );
 }
