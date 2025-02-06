@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+function Login({ setToken }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ function Login() {
         console.log("Login successful:", data);
         alert("Logged In!");
         localStorage.setItem("token", data.token);
+        setToken(data.token);
         navigate("/account");
       } else {
         console.error("Login failed:", data.message);

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Register() {
+function Register({ setToken }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -30,9 +30,10 @@ function Register() {
       if (response.ok) {
         console.log("Registration successful:", data);
         alert("Account created successfully");
-        // Store the token in local storage to log the user in automatically
-        localStorage.setItem("token", data.token); // Store the token for future authenticated requests
-        navigate("/login"); // Redirect to the login page after registration
+
+        localStorage.setItem("token", data.token);
+        setToken(data.token);
+        navigate("/account");
       } else {
         console.error("Registration failed:", data.message);
         alert("Trouble creating account...");

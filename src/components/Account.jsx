@@ -57,7 +57,7 @@ function Account() {
       return;
     }
     console.log(user);
-    console.log(`attempting to return book id: ${bookId}`);
+
     try {
       const response = await fetch(
         `https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/reservations/${bookId}`,

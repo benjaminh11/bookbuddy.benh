@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import bookLogo from "./assets/books.png";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Books from "./components/Books";
@@ -7,9 +7,17 @@ import Navigations from "./components/Navigations";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Account from "./components/Account";
+import ProtectedRoute from "../../2412-FTB-ET-WEB-FT/unit3/block29/protected-routes-demo/src/components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   const [token, setToken] = useState(null);
+  useEffect(() => {
+    console.log("effect running...");
+    const localToken = localStorage.getItem("token");
+    if (localToken) {
+      setToken(localToken);
+    }
+  }, []);
 
   return (
     <>
@@ -18,13 +26,15 @@ function App() {
         Library App
       </h1>
       <Router>
-        <Navigations />
+        <Navigations token={token} setToken={setToken} />
         <Routes>
           <Route path="/books" element={<Books />} />
           <Route path="/books/:bookId" element={<SingleBook />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/account" element={<Account />} />
+          <Route path="/login" element={<Login setToken={setToken} />} />
+          <Route path="/register" element={<Register setToken={setToken} />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/account" element={<Account />} />
+          </Route>
           <Route path="/" element={<Books />} />
         </Routes>
       </Router>
